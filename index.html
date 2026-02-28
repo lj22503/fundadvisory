@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智投AI - 智能基金投顾平台</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-chart-line"></i>
+                <span>智投AI</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link active">首页</a></li>
+                <li><a href="#advisory" class="nav-link">智能投顾</a></li>
+                <li><a href="#fund-filter" class="nav-link">基金筛选</a></li>
+                <li><a href="#portfolio" class="nav-link">投资组合</a></li>
+                <li><a href="#ai-chat" class="nav-link">AI助手</a></li>
+            </ul>
+            <div class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 首页 -->
+    <section id="home" class="section home-section">
+        <div class="container">
+            <div class="hero">
+                <div class="hero-content">
+                    <h1>AI驱动的智能基金投顾</h1>
+                    <p class="hero-subtitle">基于大数据与人工智能算法，为您提供专业的资产配置建议</p>
+                    <div class="hero-buttons">
+                        <a href="#advisory" class="btn btn-primary">开始风险测评</a>
+                        <a href="#fund-filter" class="btn btn-secondary">浏览基金</a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="chart-preview">
+                        <canvas id="heroChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="features">
+                <h2>核心功能</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-brain"></i>
+                        <h3>智能风险评估</h3>
+                        <p>科学的风险测评体系，精准定位您的风险承受能力</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-filter"></i>
+                        <h3>多维度筛选</h3>
+                        <p>从类型、业绩、风险等多角度筛选优质基金</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-pie-chart"></i>
+                        <h3>资产配置优化</h3>
+                        <p>基于现代投资组合理论，构建最优资产配置方案</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-robot"></i>
+                        <h3>7×24小时服务</h3>
+                        <p>AI投顾助手全天候在线，随时解答投资疑问</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 智能投顾 - 风险测评 -->
+    <section id="advisory" class="section advisory-section">
+        <div class="container">
+            <h2 class="section-title">智能投顾</h2>
+            
+            <!-- 风险测评问卷 -->
+            <div id="risk-assessment" class="assessment-container">
+                <div class="assessment-header">
+                    <h3><i class="fas fa-clipboard-check"></i> 风险承受能力测评</h3>
+                    <p>完成测评，获取个性化的基金配置建议</p>
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                    <span class="progress-text">问题 <span id="currentQuestion">1</span> / <span id="totalQuestions">8</span></span>
+                </div>
+
+                <div id="questionContainer" class="question-container">
+                    <!-- 问题将通过JS动态加载 -->
+                </div>
+
+                <div class="assessment-actions">
+                    <button id="prevBtn" class="btn btn-outline" disabled>上一题</button>
+                    <button id="nextBtn" class="btn btn-primary">下一题</button>
+                </div>
+            </div>
+
+            <!-- 测评结果 -->
+            <div id="assessment-result" class="result-container hidden">
+                <div class="result-header">
+                    <div class="risk-badge" id="riskBadge">稳健型</div>
+                    <h3>您的风险测评结果</h3>
+                </div>
+                <div class="result-content">
+                    <div class="result-chart">
+                        <canvas id="riskChart"></canvas>
+                    </div>
+                    <div class="result-details">
+                        <h4>配置建议</h4>
+                        <div class="allocation-list" id="allocationList">
+                            <!-- 配置建议将通过JS加载 -->
+                        </div>
+                        <div class="recommendation-text" id="recommendationText">
+                            <!-- 推荐文案 -->
+                        </div>
+                    </div>
+                </div>
+                <button id="retakeBtn" class="btn btn-outline">重新测评</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 基金筛选 -->
+    <section id="fund-filter" class="section fund-filter-section">
+        <div class="container">
+            <h2 class="section-title">基金筛选</h2>
+            
+            <div class="filter-panel">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label>基金类型</label>
+                        <select id="fundType">
+                            <option value="">全部类型</option>
+                            <option value="stock">股票型</option>
+                            <option value="bond">债券型</option>
+                            <option value="mixed">混合型</option>
+                            <option value="index">指数型</option>
+                            <option value="money">货币型</option>
+                            <option value="qdii">QDII</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>风险等级</label>
+                        <select id="riskLevel">
+                            <option value="">全部等级</option>
+                            <option value="low">低风险</option>
+                            <option value="medium-low">中低风险</option>
+                            <option value="medium">中风险</option>
+                            <option value="medium-high">中高风险</option>
+                            <option value="high">高风险</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>近一年收益</label>
+                        <select id="returnRate">
+                            <option value="">全部</option>
+                            <option value="10+">10%以上</option>
+                            <option value="5-10">5%-10%</option>
+                            <option value="0-5">0%-5%</option>
+                            <option value="negative">负收益</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>基金规模</label>
+                        <select id="fundScale">
+                            <option value="">全部规模</option>
+                            <option value="large">大型(>100亿)</option>
+                            <option value="medium">中型(10-100亿)</option>
+                            <option value="small">小型(<10亿)</option>
+                        </select>
+                    </div>
+                    <button id="filterBtn" class="btn btn-primary">
+                        <i class="fas fa-search"></i> 筛选
+                    </button>
+                    <button id="resetBtn" class="btn btn-outline">重置</button>
+                </div>
+            </div>
+
+            <div class="fund-table-container">
+                <table class="fund-table">
+                    <thead>
+                        <tr>
+                            <th>基金代码</th>
+                            <th>基金名称</th>
+                            <th>类型</th>
+                            <th>净值</th>
+                            <th>近一月</th>
+                            <th>近三月</th>
+                            <th>近一年</th>
+                            <th>规模(亿)</th>
+                            <th>风险等级</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fundTableBody">
+                        <!-- 基金数据将通过JS加载 -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                <button id="prevPage" class="btn btn-sm btn-outline" disabled>上一页</button>
+                <span id="pageInfo">第 1 页，共 5 页</span>
+                <button id="nextPage" class="btn btn-sm btn-outline">下一页</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 投资组合 -->
+    <section id="portfolio" class="section portfolio-section">
+        <div class="container">
+            <h2 class="section-title">投资组合</h2>
+            
+            <div class="portfolio-layout">
+                <div class="portfolio-charts">
+                    <div class="chart-card">
+                        <h3>资产配置分布</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="allocationChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>收益走势对比</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="performanceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="portfolio-details">
+                    <div class="portfolio-summary">
+                        <h3>组合概览</h3>
+                        <div class="summary-item">
+                            <span>组合名称</span>
+                            <strong>均衡增长型组合</strong>
+                        </div>
+                        <div class="summary-item">
+                            <span>组合市值</span>
+                            <strong class="highlight">¥128,500.00</strong>
+                        </div>
+                        <div class="summary-item">
+                            <span>累计收益</span>
+                            <strong class="positive">+¥12,350.00 (+10.62%)</strong>
+                        </div>
+                        <div class="summary-item">
+                            <span>年化收益</span>
+                            <strong class="positive">+8.45%</strong>
+                        </div>
+                        <div class="summary-item">
+                            <span>最大回撤</span>
+                            <strong class="negative">-5.23%</strong>
+                        </div>
+                    </div>
+
+                    <div class="portfolio-holdings">
+                        <h3>持仓明细</h3>
+                        <div id="holdingsList" class="holdings-list">
+                            <!-- 持仓数据将通过JS加载 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI对话 -->
+    <section id="ai-chat" class="section ai-chat-section">
+        <div class="container">
+            <h2 class="section-title">AI投顾助手</h2>
+            
+            <div class="chat-container">
+                <div class="chat-header">
+                    <div class="ai-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="ai-info">
+                        <h3>智投小助手</h3>
+                        <span class="status online">
+                            <i class="fas fa-circle"></i> 在线
+                        </span>
+                    </div>
+                    <div class="chat-actions">
+                        <button id="clearChat" class="btn btn-sm btn-outline">
+                            <i class="fas fa-trash"></i> 清空
+                        </button>
+                    </div>
+                </div>
+
+                <div id="chatMessages" class="chat-messages">
+                    <div class="message ai-message">
+                        <div class="message-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <p>您好！我是您的AI投顾助手。我可以帮您：</p>
+                            <ul>
+                                <li>解答基金投资相关问题</li>
+                                <li>分析市场行情</li>
+                                <li>提供投资建议</li>
+                                <li>解读基金报告</li>
+                            </ul>
+                            <p>请问有什么可以帮助您的？</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-input-area">
+                    <div class="quick-replies">
+                        <button class="quick-reply" data-question="现在适合买什么基金？">现在适合买什么基金？</button>
+                        <button class="quick-reply" data-question="如何分散投资风险？">如何分散投资风险？</button>
+                        <button class="quick-reply" data-question="基金定投怎么选？">基金定投怎么选？</button>
+                    </div>
+                    <div class="input-wrapper">
+                        <input type="text" id="chatInput" placeholder="请输入您的问题..." maxlength="200">
+                        <button id="sendBtn" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <i class="fas fa-chart-line"></i>
+                    <span>智投AI</span>
+                    <p>让投资更智能，让财富更稳健</p>
+                </div>
+                <div class="footer-links">
+                    <h4>快速链接</h4>
+                    <ul>
+                        <li><a href="#home">首页</a></li>
+                        <li><a href="#advisory">智能投顾</a></li>
+                        <li><a href="#fund-filter">基金筛选</a></li>
+                        <li><a href="#portfolio">投资组合</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>联系我们</h4>
+                    <p><i class="fas fa-envelope"></i> support@zhitou-ai.com</p>
+                    <p><i class="fas fa-phone"></i> 400-888-8888</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 智投AI. 本产品仅供演示，不构成投资建议。</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
